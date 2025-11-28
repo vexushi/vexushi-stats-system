@@ -37,7 +37,7 @@ func set_stats() -> void:
 func _on_damage_button_up() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
-		health_component.decrease_health(30)
+		health_component.decrease_health(30, 0.25)
 	pass # Replace with function body.
 
 

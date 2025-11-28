@@ -34,15 +34,13 @@ func _process(delta: float) -> void:
 
 ## Sets health into x amount.
 func set_health(amount: float) -> void:
-	health = amount
-	health_changed.emit()
+	_update_health(amount)
 	
 ## Resets health to max health
 func reset_health() -> void:
-	health = stats.max_health
-	health_changed.emit()
+	_update_health(stats.max_health)
 
-## Returns the health percentage
+## Returns the health from 0.0 - 1.0
 func get_health_percent() -> float:
 	return health / stats.max_health
 
@@ -55,18 +53,10 @@ func increase_health(amount: float) -> void:
 	if is_dead():
 		print("%s is dead! Cannot increase health." % [get_parent().name])
 		return
-		
-	var prev_health = health
 	
-	# Increases health by amount, doesn't go above max health
-	health = min(health + amount, stats.max_health)
-	
-	# Makes sure to only emit signal if health was not at max before increasing.
-	if health > prev_health:
-		healed.emit()
-		health_changed.emit()
-	
-	was_low_health = is_low() # Resets state after heal for signal in decrease_health()
+	_update_health(health + amount)
+	healed.emit()
+	print("%s healed %d HP" % [get_parent().name, int(amount)])
 
 ## Decrease health by x amount.
 func decrease_health(damage: float, defense_penetration: float = 0.0) -> void:
@@ -79,16 +69,23 @@ func decrease_health(damage: float, defense_penetration: float = 0.0) -> void:
 	damage = damage - modifier + (modifier * defense_penetration) # Apply damage reduction by defense
 	
 	# Lowers health by damage, doesn't go below 0
-	health = max(health - damage, 0.0)
+	_update_health(health - damage)
 	damaged.emit()
 	print("%s lost %d HP" % [get_parent().name, int(damage)])
+
+func _update_health(new_value: float) -> void:
+	var prev_health = health
 	
-	health_changed.emit()
+	# Changes health within limit (0 - max health).
+	health = clampf(new_value, 0.0, stats.max_health)
 	
-	if is_dead(): # Checks if died after applied damage
+	if health != prev_health: # Emit signal only if health changes
+		health_changed.emit()
+	
+	if is_dead(): # Announce death
 		died.emit()
 		return
-	
+		
 	var now_low_health = is_low()
 	if now_low_health and not was_low_health:
 		just_reached_low_health.emit()
