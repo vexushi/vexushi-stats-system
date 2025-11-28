@@ -16,7 +16,7 @@ signal just_reached_below_low_health
 signal just_restored_above_low_health
 signal damaged
 signal healed
-signal health_changed
+signal health_changed(old_value: float, new_value: float)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -81,7 +81,7 @@ func _update_health(new_value: float) -> void:
 	health = clampf(new_value, 0.0, stats.max_health)
 	
 	if health != prev_health: # Emit signal only if health changes
-		health_changed.emit()
+		health_changed.emit(prev_health, health)
 	
 	if is_dead(): # Announce death
 		died.emit()
@@ -100,8 +100,8 @@ func is_low() -> bool:
 
 ## Checks if health is full.
 func is_full() -> bool:
-	return health == stats.max_health
+	return health >= stats.max_health
 
 ## Checks if node is dead. 
 func is_dead() -> bool:
-	return health == 0.0
+	return health <= 0.0
