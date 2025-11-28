@@ -7,6 +7,7 @@ extends Node2D
 @onready var health_percentage: Label = $Stats/VBoxContainer/HealthPercentage
 @onready var low_health: Label = $Stats/VBoxContainer/LowHealth
 
+@export var health_bar: ProgressBar
 
 @export var texture: CompressedTexture2D = load("res://icon.svg")
 
@@ -29,7 +30,7 @@ func set_stats() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
 		health.text = "Health: " + str(health_component.health)
-		health_percentage.text = "HP%: " + str(int(health_component.get_health_percent() * 100))
+		health_percentage.text = "HP%: " + str(ceil(health_component.get_health_percent() * 100))
 		low_health.text = "Low HP: " + str(health_component.is_low())
 	else: return
 
@@ -54,5 +55,15 @@ func _on_kill_button_up() -> void:
 	pass # Replace with function body.
 
 func _on_health_component_just_reached_below_low_health() -> void:
+	health_bar.fill_color_to_low()
 	print("Health is now low!")
+	pass # Replace with function body.
+
+@warning_ignore("unused_parameter")
+func _on_health_component_health_changed(old_value: float, new_value: float) -> void:
+	health_bar.value = ceil(new_value)
+	pass # Replace with function body.
+
+func _on_health_component_just_restored_above_low_health() -> void:
+	health_bar.fill_color_to_normal()
 	pass # Replace with function body.

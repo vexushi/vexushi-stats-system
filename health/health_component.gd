@@ -2,7 +2,7 @@ class_name HealthComponent
 extends Node
 
 @export var stats:Stats = null
-@export var low_health_treshhold: float = 0.25 ## Threshhold that determines if the health amount is considered low.
+@export var low_health_treshhold: float = 0.30 ## Threshhold that determines if the health amount is considered low.
 
 var health: float = 0.0
 var was_low_health: bool = false ## Whether health was low before damaged.
@@ -96,7 +96,7 @@ func _update_health(new_value: float) -> void:
 
 ## Checks if health is considered low.
 func is_low() -> bool:
-	return health/stats.max_health <= low_health_treshhold
+	return roundf(health) <= roundf(low_health_treshhold * stats.max_health) 
 
 ## Checks if health is full.
 func is_full() -> bool:

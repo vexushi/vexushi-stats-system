@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://83l7btog1bkc"]
+[gd_scene load_steps=7 format=3 uid="uid://83l7btog1bkc"]
 
 [ext_resource type="PackedScene" uid="uid://dq1em2fw3y4ay" path="res://entities/entity.tscn" id="1_ifkhq"]
 [ext_resource type="Script" uid="uid://baom7f4psosaj" path="res://health/health_component.gd" id="2_ifkhq"]
 [ext_resource type="Script" uid="uid://c45khdcxnvgrp" path="res://stats/stats.gd" id="3_25h3d"]
+[ext_resource type="PackedScene" uid="uid://cjjwl843smqa6" path="res://health/health_bar.tscn" id="4_sm0j5"]
 
 [sub_resource type="Resource" id="Resource_25h3d"]
 script = ExtResource("3_25h3d")
@@ -19,13 +20,20 @@ metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="EntityA" parent="." instance=ExtResource("1_ifkhq")]
+[node name="EntityA" parent="." node_paths=PackedStringArray("health_bar") instance=ExtResource("1_ifkhq")]
 position = Vector2(551, 232)
+health_bar = NodePath("HealthBar")
 
 [node name="HealthComponent" type="Node" parent="EntityA"]
 script = ExtResource("2_ifkhq")
 stats = SubResource("Resource_25h3d")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
+
+[node name="HealthBar" parent="EntityA" node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
+offset_top = -163.0
+offset_bottom = -140.0
+max_value = 200.0
+health_component = NodePath("../HealthComponent")
 
 [node name="EntityB" parent="." instance=ExtResource("1_ifkhq")]
 visible = false
@@ -36,4 +44,6 @@ script = ExtResource("2_ifkhq")
 stats = SubResource("Resource_sm0j5")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
+[connection signal="health_changed" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_health_changed"]
 [connection signal="just_reached_below_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_reached_below_low_health"]
+[connection signal="just_restored_above_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_restored_above_low_health"]
