@@ -14,3 +14,7 @@ config/name="New Game Project"
 run/main_scene="uid://83l7btog1bkc"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/mode="canvas_items"
