@@ -1,0 +1,98 @@
+[gd_scene load_steps=3 format=3 uid="uid://dq1em2fw3y4ay"]
+
+[ext_resource type="Script" uid="uid://dxrhpukp14jkf" path="res://entities/entity.gd" id="1_ep4xq"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_jm4vq"]
+
+[node name="Entity" type="Node2D"]
+script = ExtResource("1_ep4xq")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_jm4vq")
+
+[node name="Nametag" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -113.0
+offset_right = 20.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Name"
+horizontal_alignment = 1
+
+[node name="Stats" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 82.0
+offset_right = 20.0
+offset_bottom = 122.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Stats"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Health" type="Label" parent="Stats/VBoxContainer"]
+layout_mode = 2
+text = "Health: null"
+horizontal_alignment = 1
+
+[node name="HealthPercentage" type="Label" parent="Stats/VBoxContainer"]
+layout_mode = 2
+text = "HP%: null"
+horizontal_alignment = 1
+
+[node name="LowHealth" type="Label" parent="Stats/VBoxContainer"]
+layout_mode = 2
+text = "Low HP: null"
+horizontal_alignment = 1
+
+[node name="DebugActions" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugActions"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_top = 187.0
+offset_right = 36.0
+offset_bottom = 288.0
+grow_horizontal = 2
+
+[node name="Damage" type="Button" parent="DebugActions/VBoxContainer"]
+layout_mode = 2
+text = "Damage"
+
+[node name="Heal" type="Button" parent="DebugActions/VBoxContainer"]
+layout_mode = 2
+text = "Heal"
+
+[node name="Kill" type="Button" parent="DebugActions/VBoxContainer"]
+layout_mode = 2
+text = "Kill"
+
+[connection signal="button_up" from="DebugActions/VBoxContainer/Damage" to="." method="_on_damage_button_up"]
+[connection signal="button_up" from="DebugActions/VBoxContainer/Heal" to="." method="_on_heal_button_up"]
+[connection signal="button_up" from="DebugActions/VBoxContainer/Kill" to="." method="_on_kill_button_up"]

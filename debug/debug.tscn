@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://83l7btog1bkc"]
+
+[ext_resource type="PackedScene" uid="uid://dq1em2fw3y4ay" path="res://entities/entity.tscn" id="1_ifkhq"]
+[ext_resource type="Script" uid="uid://baom7f4psosaj" path="res://health/health_component.gd" id="2_ifkhq"]
+
+[node name="Debug" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="EntityA" parent="." instance=ExtResource("1_ifkhq")]
+position = Vector2(238, 232)
+
+[node name="HealthComponent" type="Node" parent="EntityA"]
+script = ExtResource("2_ifkhq")
+metadata/_custom_type_script = "uid://baom7f4psosaj"
+
+[node name="EntityB" parent="." instance=ExtResource("1_ifkhq")]
+position = Vector2(881, 232)
+
+[node name="HealthComponent" type="Node" parent="EntityB"]
+script = ExtResource("2_ifkhq")
+max_health = 50.0
+metadata/_custom_type_script = "uid://baom7f4psosaj"
