@@ -14,7 +14,9 @@ extends Node2D
 func _ready() -> void:
 	nametag.text = self.name
 	sprite.texture = texture
-	pass # Replace with function body.
+	
+	if !has_node("HealthComponent"):
+		print("Health component not found!\n At %s" % [self.get_path()])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
@@ -27,22 +29,22 @@ func set_stats() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
 		health.text = "Health: " + str(health_component.health)
-		health_percentage.text = "HP%: " + str(int(health_component.health / health_component.max_health * 100))
+		health_percentage.text = "HP%: " + str(int(health_component.get_health_percent() * 100))
 		low_health.text = "Low HP: " + str(health_component.is_low())
-	else: print("Health component not found!\n At %s" % [self.get_path()])
+	else: return
 
 
 func _on_damage_button_up() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
-		health_component.decrease_health(3)
+		health_component.decrease_health(30)
 	pass # Replace with function body.
 
 
 func _on_heal_button_up() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
-		health_component.increase_health(3)
+		health_component.increase_health(20)
 	pass # Replace with function body.
 
 
@@ -50,4 +52,10 @@ func _on_kill_button_up() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
 		health_component.decrease_health(health_component.health)
+	pass # Replace with function body.
+
+
+
+func _on_health_component_just_reached_low_health() -> void:
+	print("Health is now low!")
 	pass # Replace with function body.

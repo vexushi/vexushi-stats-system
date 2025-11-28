@@ -1,7 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://83l7btog1bkc"]
+[gd_scene load_steps=6 format=3 uid="uid://83l7btog1bkc"]
 
 [ext_resource type="PackedScene" uid="uid://dq1em2fw3y4ay" path="res://entities/entity.tscn" id="1_ifkhq"]
 [ext_resource type="Script" uid="uid://baom7f4psosaj" path="res://health/health_component.gd" id="2_ifkhq"]
+[ext_resource type="Script" uid="uid://c45khdcxnvgrp" path="res://stats/stats.gd" id="3_25h3d"]
+
+[sub_resource type="Resource" id="Resource_25h3d"]
+script = ExtResource("3_25h3d")
+defense = 23.0
+metadata/_custom_type_script = "uid://c45khdcxnvgrp"
+
+[sub_resource type="Resource" id="Resource_sm0j5"]
+script = ExtResource("3_25h3d")
+max_health = 500.0
+metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 
 [node name="Debug" type="Node2D"]
 
@@ -9,16 +20,20 @@
 anchor_mode = 0
 
 [node name="EntityA" parent="." instance=ExtResource("1_ifkhq")]
-position = Vector2(238, 232)
+position = Vector2(551, 232)
 
 [node name="HealthComponent" type="Node" parent="EntityA"]
 script = ExtResource("2_ifkhq")
+stats = SubResource("Resource_25h3d")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
 [node name="EntityB" parent="." instance=ExtResource("1_ifkhq")]
+visible = false
 position = Vector2(881, 232)
 
 [node name="HealthComponent" type="Node" parent="EntityB"]
 script = ExtResource("2_ifkhq")
-max_health = 50.0
+stats = SubResource("Resource_sm0j5")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
+
+[connection signal="just_reached_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_reached_low_health"]
