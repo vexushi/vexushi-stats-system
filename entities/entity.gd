@@ -47,15 +47,12 @@ func _on_heal_button_up() -> void:
 		health_component.increase_health(20)
 	pass # Replace with function body.
 
-
 func _on_kill_button_up() -> void:
 	if has_node("HealthComponent"):
 		var health_component:HealthComponent = get_node("HealthComponent")
 		health_component.decrease_health(health_component.health)
 	pass # Replace with function body.
 
-
-
-func _on_health_component_just_reached_low_health() -> void:
+func _on_health_component_just_reached_below_low_health() -> void:
 	print("Health is now low!")
 	pass # Replace with function body.

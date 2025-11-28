@@ -36,4 +36,4 @@ script = ExtResource("2_ifkhq")
 stats = SubResource("Resource_sm0j5")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
-[connection signal="just_reached_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_reached_low_health"]
+[connection signal="just_reached_below_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_reached_below_low_health"]

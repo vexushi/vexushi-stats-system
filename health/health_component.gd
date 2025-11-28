@@ -12,7 +12,8 @@ const DEFENSE_CONSTANT = 0.3 ## Constant for defense modifier
 
 # Signals
 signal died
-signal just_reached_low_health
+signal just_reached_below_low_health
+signal just_restored_above_low_health
 signal damaged
 signal healed
 signal health_changed
@@ -88,7 +89,9 @@ func _update_health(new_value: float) -> void:
 		
 	var now_low_health = is_low()
 	if now_low_health and not was_low_health:
-		just_reached_low_health.emit()
+		just_reached_below_low_health.emit()
+	elif not now_low_health and was_low_health:
+		just_restored_above_low_health.emit()
 	was_low_health = now_low_health
 
 ## Checks if health is considered low.
