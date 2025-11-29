@@ -9,6 +9,8 @@ var was_low_health: bool = false ## Whether health was low before damaged.
 
 # Stat constants for modifiers
 const DEFENSE_CONSTANT = 0.3 ## Constant for defense modifier
+const ASBESTINE_CONSTANT = 0.3 ## Constant for defense modifier
+const IMMUNITY_CONSTANT = 0.3 ## Constant for defense modifier
 
 # Signals
 signal died
@@ -60,14 +62,21 @@ func increase_health(amount: float) -> void:
 	print("%s healed %d HP" % [get_parent().name, int(amount)])
 
 ## Decrease health by x amount.
-func decrease_health(damage: float, defense_penetration: float = 0.0) -> void:
+func decrease_health(damage: float, type: Stats.Types) -> void:
 	if is_dead(): # Don't decrease health if already dead
 		print("%s is dead! Unable to decrease health further." % [get_parent().name])
 		return
-	
-	var modifier = DEFENSE_CONSTANT * stats.defense
-	defense_penetration = clampf(defense_penetration, 0.0, 1.0)
-	damage = damage - modifier + (modifier * defense_penetration) # Apply damage reduction by defense
+	var modifier: float = 0.0
+	match type:
+		Stats.Types.NORMAL:
+			modifier = DEFENSE_CONSTANT * stats.defense
+		Stats.Types.FIRE:
+			modifier = ASBESTINE_CONSTANT * stats.asbestine
+		Stats.Types.POISON:
+			modifier = IMMUNITY_CONSTANT * stats.immunity
+	#var modifier = DEFENSE_CONSTANT * stats.defense
+	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
+	damage = damage - modifier # Apply damage reduction by defense
 	
 	# Lowers health by damage, doesn't go below 0
 	_update_health(health - damage)
