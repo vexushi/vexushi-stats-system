@@ -1,3 +1,5 @@
+# Handles sending damage
+
 class_name AttackComponent
 extends Node
 

@@ -1,3 +1,5 @@
+# Handles recieving damage
+
 class_name HealthComponent
 extends Node
 
@@ -9,8 +11,8 @@ var was_low_health: bool = false ## Whether health was low before damaged.
 
 # Stat constants for modifiers
 const DEFENSE_CONSTANT = 0.3 ## Constant for defense modifier
-const ASBESTINE_CONSTANT = 0.3 ## Constant for defense modifier
-const IMMUNITY_CONSTANT = 0.3 ## Constant for defense modifier
+const ASBESTINE_CONSTANT = 0.3 ## Constant for fire resistance modifier
+const IMMUNITY_CONSTANT = 0.3 ## Constant for poison resistance modifier
 
 # Signals
 signal died
@@ -76,7 +78,7 @@ func decrease_health(damage: float, type: Stats.Types) -> void:
 			modifier = IMMUNITY_CONSTANT * stats.immunity
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
-	damage = damage - modifier # Apply damage reduction by defense
+	damage = max(damage - modifier, 0.0) # Apply damage reduction by defense
 	
 	# Lowers health by damage, doesn't go below 0
 	_update_health(health - damage)
@@ -105,7 +107,7 @@ func _update_health(new_value: float) -> void:
 
 ## Checks if health is considered low.
 func is_low() -> bool:
-	return roundf(health) <= roundf(low_health_treshhold * stats.max_health) 
+	return health <= low_health_treshhold * stats.max_health
 
 ## Checks if health is full.
 func is_full() -> bool:
