@@ -30,20 +30,39 @@ func load_stats_from_resource(res: Stats) -> Dictionary:
 			data[p.name] = res.get(p.name)
 	return data
 
-func recalculate_stats(stat:String, type:ModifierType, value:float) -> void:
-	if !base_stats: return # Makes sure base stats is valid
-	
-	if !final_stats.has(stat): return # Makes sure parameter is valid
-	
+func recalculate_stats() -> void:
+	var stats = load_stats_from_resource(base_stats)
+	for d in active_modifiers:
+		var stat = d["stat"]
+		var type = d["type"]
+		var value = d["value"]
+		match type:
+			ModifierType.ADD:
+				stats[stat] = max(stats[stat] + value, 0.0)
+			ModifierType.MULTIPLY:
+				stats[stat] = max(stats[stat] * value, 0.0)
+	final_stats = stats
+
+func add_modifier(stat:String, type:ModifierType, value:float) -> void:
+	if !final_stats.has(stat): # Makes sure parameter is valid
+		print("Invalid stat entry: ", stat)
+		return 
 	var modifier: Dictionary = {
 		"stat" : stat,
 		"type" : type,
 		"value" : value
 	}
 	active_modifiers.append(modifier)
+	recalculate_stats()
 	
-	match type:
-		ModifierType.ADD:
-			final_stats[stat] = max(final_stats[stat] + value, 0.0)
-		ModifierType.MULTIPLY:
-			final_stats[stat] = max(final_stats[stat] * value, 0.0)
+func remove_modifier(stat:String) -> void:
+	if !final_stats.has(stat): # Makes sure parameter is valid
+		print("Invalid stat entry: ", stat)
+		return 
+	
+	for d in active_modifiers:
+		if d["stat"] == stat:
+			active_modifiers.erase(d)
+			break
+			
+	recalculate_stats()
