@@ -72,17 +72,17 @@ func increase_health(amount: float) -> void:
 	print("%s healed %d HP" % [get_parent().name, int(amount)])
 
 ## Decrease health by x amount.
-func decrease_health(damage: float, type: Stats.Types) -> void:
+func decrease_health(damage: float, type: Moves.Types) -> void:
 	if is_dead(): # Don't decrease health if already dead
 		print("%s is dead! Unable to decrease health further." % [get_parent().name])
 		return
 	var modifier: float = 0.0
 	match type:
-		Stats.Types.NORMAL:
+		Moves.Types.NORMAL:
 			modifier = DEFENSE_CONSTANT * get_stats()["defense"]
-		Stats.Types.FIRE:
+		Moves.Types.FIRE:
 			modifier = ASBESTINE_CONSTANT * get_stats()["asbestine"]
-		Stats.Types.POISON:
+		Moves.Types.POISON:
 			modifier = IMMUNITY_CONSTANT * get_stats()["immunity"]
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)

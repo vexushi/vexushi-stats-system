@@ -37,7 +37,7 @@ func set_stats() -> void:
 
 func _on_damage_button_up() -> void:
 	if health_component:
-		health_component.decrease_health(30, Stats.Types.NORMAL)
+		health_component.decrease_health(30, Moves.Types.NORMAL)
 	pass # Replace with function body.
 
 
