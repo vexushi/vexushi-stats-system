@@ -3,7 +3,6 @@
 class_name HealthComponent
 extends Node
 
-@export var stats:Stats = null
 @export var low_health_treshhold: float = 0.30 ## Threshhold that determines if the health amount is considered low.
 
 var health: float = 0.0
@@ -25,17 +24,26 @@ signal health_changed(old_value: float, new_value: float)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Checks if stats are valid.
-	if  not stats:
+	if  not get_stats():
 		push_error("Stats invalid!\n At: %s" % [self.get_path()])
 		queue_free()
 		return
-		
-	set_health(stats.max_health)
+	
+	print(get_stats())
+	
+	set_health(get_stats().max_health)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	pass
+
+## Returns stats resource from StatsComponent
+func get_stats() -> Dictionary:
+	if get_parent().has_node("StatsComponent"):
+		return get_parent().get_node("StatsComponent").final_stats
+	else:
+		return {}
 
 ## Sets health into x amount.
 func set_health(amount: float) -> void:
@@ -43,11 +51,11 @@ func set_health(amount: float) -> void:
 	
 ## Resets health to max health
 func reset_health() -> void:
-	_update_health(stats.max_health)
+	_update_health(get_stats()["max_health"])
 
 ## Returns the health from 0.0 - 1.0
 func get_health_percent() -> float:
-	return health / stats.max_health
+	return health / get_stats()["max_health"]
 
 ## Increase health by x amount.
 func increase_health(amount: float) -> void:
@@ -71,11 +79,11 @@ func decrease_health(damage: float, type: Stats.Types) -> void:
 	var modifier: float = 0.0
 	match type:
 		Stats.Types.NORMAL:
-			modifier = DEFENSE_CONSTANT * stats.defense
+			modifier = DEFENSE_CONSTANT * get_stats()["defense"]
 		Stats.Types.FIRE:
-			modifier = ASBESTINE_CONSTANT * stats.asbestine
+			modifier = ASBESTINE_CONSTANT * get_stats()["asbestine"]
 		Stats.Types.POISON:
-			modifier = IMMUNITY_CONSTANT * stats.immunity
+			modifier = IMMUNITY_CONSTANT * get_stats()["immunity"]
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
 	damage = max(damage - modifier, 0.0) # Apply damage reduction by defense
@@ -89,7 +97,7 @@ func _update_health(new_value: float) -> void:
 	var prev_health = health
 	
 	# Changes health within limit (0 - max health).
-	health = clampf(new_value, 0.0, stats.max_health)
+	health = clampf(new_value, 0.0, get_stats()["max_health"])
 	
 	if health != prev_health: # Emit signal only if health changes
 		health_changed.emit(prev_health, health)
@@ -107,11 +115,11 @@ func _update_health(new_value: float) -> void:
 
 ## Checks if health is considered low.
 func is_low() -> bool:
-	return health <= low_health_treshhold * stats.max_health
+	return health <= low_health_treshhold * get_stats()["max_health"]
 
 ## Checks if health is full.
 func is_full() -> bool:
-	return health >= stats.max_health
+	return health >= get_stats()["max_health"]
 
 ## Checks if node is dead. 
 func is_dead() -> bool:

@@ -1,31 +1,30 @@
-[gd_scene load_steps=10 format=3 uid="uid://83l7btog1bkc"]
+[gd_scene load_steps=11 format=3 uid="uid://83l7btog1bkc"]
 
 [ext_resource type="PackedScene" uid="uid://dq1em2fw3y4ay" path="res://entities/entity.tscn" id="1_ifkhq"]
 [ext_resource type="Script" uid="uid://baom7f4psosaj" path="res://health/health_component.gd" id="2_ifkhq"]
+[ext_resource type="Script" uid="uid://by8impnodn0ti" path="res://stats/stats_component.gd" id="2_nlbt3"]
 [ext_resource type="Script" uid="uid://c45khdcxnvgrp" path="res://stats/stats.gd" id="3_25h3d"]
 [ext_resource type="PackedScene" uid="uid://cjjwl843smqa6" path="res://health/health_bar.tscn" id="4_sm0j5"]
 [ext_resource type="Script" uid="uid://xdo77ptt2r7t" path="res://attack/attack_component.gd" id="4_stv80"]
 [ext_resource type="Script" uid="uid://bcdk72ub6535p" path="res://attack/moves/moves.gd" id="5_jfkso"]
 
-[sub_resource type="Resource" id="Resource_25h3d"]
+[sub_resource type="Resource" id="Resource_f7210"]
 script = ExtResource("3_25h3d")
-defense = 23.0
-attack = 24.0
+defense = 11.0
+attack = 16.0
 metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 
 [sub_resource type="Resource" id="Resource_nlbt3"]
 script = ExtResource("5_jfkso")
 name = "Slash"
 raw_damage = 30.0
-multiplier = 0.15
+multiplier = 0.5
 metadata/_custom_type_script = "uid://bcdk72ub6535p"
 
-[sub_resource type="Resource" id="Resource_jfkso"]
+[sub_resource type="Resource" id="Resource_ydp0h"]
 script = ExtResource("3_25h3d")
 max_health = 700.0
-defense = 2.0
-asbestine = 3.0
-immunity = 3.0
+defense = 9.0
 metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 
 [node name="Debug" type="Node2D"]
@@ -40,14 +39,17 @@ health_component = NodePath("HealthComponent")
 attack_component = NodePath("AttackComponent")
 attack_target = NodePath("../EntityB/HealthComponent")
 
+[node name="StatsComponent" type="Node" parent="EntityA"]
+script = ExtResource("2_nlbt3")
+base_stats = SubResource("Resource_f7210")
+metadata/_custom_type_script = "uid://by8impnodn0ti"
+
 [node name="HealthComponent" type="Node" parent="EntityA"]
 script = ExtResource("2_ifkhq")
-stats = SubResource("Resource_25h3d")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
 [node name="AttackComponent" type="Node" parent="EntityA"]
 script = ExtResource("4_stv80")
-stats = SubResource("Resource_25h3d")
 moveset = Array[ExtResource("5_jfkso")]([SubResource("Resource_nlbt3")])
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
@@ -63,14 +65,17 @@ health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
 attack_component = NodePath("AttackComponent")
 
+[node name="StatsComponent" type="Node" parent="EntityB"]
+script = ExtResource("2_nlbt3")
+base_stats = SubResource("Resource_ydp0h")
+metadata/_custom_type_script = "uid://by8impnodn0ti"
+
 [node name="HealthComponent" type="Node" parent="EntityB"]
 script = ExtResource("2_ifkhq")
-stats = SubResource("Resource_jfkso")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
 [node name="AttackComponent" type="Node" parent="EntityB"]
 script = ExtResource("4_stv80")
-stats = SubResource("Resource_jfkso")
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
 [node name="HealthBar" parent="EntityB" node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
