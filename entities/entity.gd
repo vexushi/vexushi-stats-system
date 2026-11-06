@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var nametag: Label = $Nametag
 @onready var sprite: Sprite2D = $Sprite
+@export var move_1: Button
 
 @onready var health_label: Label = $Stats/VBoxContainer/Health
 @onready var health_percentage_label: Label = $Stats/VBoxContainer/HealthPercentage
@@ -9,9 +10,9 @@ extends Node2D
 
 @export var health_bar: ProgressBar
 @export var health_component: HealthComponent = null
-@export var attack_component: AttackComponent = null
+@export var ability_component: AbilityComponent = null
 
-@export var attack_target: HealthComponent
+@export var ability_target: HealthComponent
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -37,7 +38,7 @@ func set_stats() -> void:
 
 func _on_damage_button_up() -> void:
 	if health_component:
-		health_component.decrease_health(30, Moves.Types.NORMAL)
+		health_component.decrease_health(30, Stats.Type.NEUTER)
 	pass # Replace with function body.
 
 
@@ -66,17 +67,16 @@ func _on_health_component_just_restored_above_low_health() -> void:
 		health_bar.fill_color_to_normal()
 	pass # Replace with function body.
 
-func _on_attack_component_attacked(move: Moves) -> void:
+func _on_ability_component_ability_used(move: Move) -> void:
 	print("%s used %s!" % [self.name, move.name])
 	pass # Replace with function body.
 
 func _on_move_1_button_up() -> void:
-	if attack_component:
-		var i: int = 0
-		var move_id: int
-		for move in attack_component.moveset:
-			if move.name == "Slash":
-				move_id = i
-			i += 1
-		attack_component.send_attack(attack_target, attack_component.moveset[move_id])
+	if ability_component:
+		ability_component.use_ability(ability_target, ability_component.moveset[0])
+	pass # Replace with function body.
+
+func _on_move_2_button_up() -> void:
+	if ability_component:
+		ability_component.use_ability(ability_target, ability_component.moveset[1])
 	pass # Replace with function body.

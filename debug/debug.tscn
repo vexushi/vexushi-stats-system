@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://by8impnodn0ti" path="res://stats/stats_component.gd" id="2_nlbt3"]
 [ext_resource type="Script" uid="uid://c45khdcxnvgrp" path="res://stats/stats.gd" id="3_25h3d"]
 [ext_resource type="PackedScene" uid="uid://cjjwl843smqa6" path="res://health/health_bar.tscn" id="4_sm0j5"]
-[ext_resource type="Script" uid="uid://xdo77ptt2r7t" path="res://attack/attack_component.gd" id="4_stv80"]
-[ext_resource type="Script" uid="uid://bcdk72ub6535p" path="res://attack/moves/moves.gd" id="5_jfkso"]
+[ext_resource type="Script" uid="uid://xdo77ptt2r7t" path="res://attack/ability_component.gd" id="4_stv80"]
+[ext_resource type="Script" uid="uid://bcdk72ub6535p" path="res://attack/moves/move.gd" id="5_jfkso"]
 
 [sub_resource type="Resource" id="Resource_f7210"]
 script = ExtResource("3_25h3d")
@@ -17,7 +17,15 @@ metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 [sub_resource type="Resource" id="Resource_nlbt3"]
 script = ExtResource("5_jfkso")
 name = "Slash"
-raw_damage = 30.0
+raw_power = 50.0
+multiplier = 0.5
+metadata/_custom_type_script = "uid://bcdk72ub6535p"
+
+[sub_resource type="Resource" id="Resource_6803i"]
+script = ExtResource("5_jfkso")
+name = "Quake"
+type = 5
+raw_power = 50.0
 multiplier = 0.5
 metadata/_custom_type_script = "uid://bcdk72ub6535p"
 
@@ -25,19 +33,29 @@ metadata/_custom_type_script = "uid://bcdk72ub6535p"
 script = ExtResource("3_25h3d")
 max_health = 700.0
 defense = 9.0
+attack = 20.0
+type = 4
 metadata/_custom_type_script = "uid://c45khdcxnvgrp"
+
+[sub_resource type="Resource" id="Resource_iv6g7"]
+script = ExtResource("5_jfkso")
+name = "Smite"
+type = 4
+raw_power = 50.0
+multiplier = 0.5
+metadata/_custom_type_script = "uid://bcdk72ub6535p"
 
 [node name="Debug" type="Node2D" unique_id=350398024]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2111388713]
 anchor_mode = 0
 
-[node name="EntityA" parent="." unique_id=1472110959 node_paths=PackedStringArray("health_bar", "health_component", "attack_component", "attack_target") instance=ExtResource("1_ifkhq")]
+[node name="EntityA" parent="." unique_id=1472110959 node_paths=PackedStringArray("health_bar", "health_component", "ability_component", "ability_target") instance=ExtResource("1_ifkhq")]
 position = Vector2(266, 232)
 health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
-attack_component = NodePath("AttackComponent")
-attack_target = NodePath("../EntityB/HealthComponent")
+ability_component = NodePath("AbilityComponent")
+ability_target = NodePath("../EntityB/HealthComponent")
 
 [node name="StatsComponent" type="Node" parent="EntityA" unique_id=1136467292]
 script = ExtResource("2_nlbt3")
@@ -48,9 +66,9 @@ metadata/_custom_type_script = "uid://by8impnodn0ti"
 script = ExtResource("2_ifkhq")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
-[node name="AttackComponent" type="Node" parent="EntityA" unique_id=1304497325]
+[node name="AbilityComponent" type="Node" parent="EntityA" unique_id=1304497325]
 script = ExtResource("4_stv80")
-moveset = Array[ExtResource("5_jfkso")]([SubResource("Resource_nlbt3")])
+moveset = Array[ExtResource("5_jfkso")]([SubResource("Resource_nlbt3"), SubResource("Resource_6803i")])
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
 [node name="HealthBar" parent="EntityA" unique_id=2052813472 node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
@@ -59,11 +77,12 @@ offset_bottom = -140.0
 max_value = 200.0
 health_component = NodePath("../HealthComponent")
 
-[node name="EntityB" parent="." unique_id=549579009 node_paths=PackedStringArray("health_bar", "health_component", "attack_component") instance=ExtResource("1_ifkhq")]
+[node name="EntityB" parent="." unique_id=549579009 node_paths=PackedStringArray("health_bar", "health_component", "ability_component", "ability_target") instance=ExtResource("1_ifkhq")]
 position = Vector2(874, 232)
 health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
-attack_component = NodePath("AttackComponent")
+ability_component = NodePath("AbilityComponent")
+ability_target = NodePath("../EntityA/HealthComponent")
 
 [node name="StatsComponent" type="Node" parent="EntityB" unique_id=434442323]
 script = ExtResource("2_nlbt3")
@@ -74,8 +93,9 @@ metadata/_custom_type_script = "uid://by8impnodn0ti"
 script = ExtResource("2_ifkhq")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
-[node name="AttackComponent" type="Node" parent="EntityB" unique_id=1524651356]
+[node name="AbilityComponent" type="Node" parent="EntityB" unique_id=1524651356]
 script = ExtResource("4_stv80")
+moveset = Array[ExtResource("5_jfkso")]([SubResource("Resource_iv6g7")])
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
 [node name="HealthBar" parent="EntityB" unique_id=2033750734 node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
@@ -87,8 +107,8 @@ health_component = NodePath("../HealthComponent")
 [connection signal="health_changed" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_health_changed"]
 [connection signal="just_reached_below_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_reached_below_low_health"]
 [connection signal="just_restored_above_low_health" from="EntityA/HealthComponent" to="EntityA" method="_on_health_component_just_restored_above_low_health"]
-[connection signal="attacked" from="EntityA/AttackComponent" to="EntityA" method="_on_attack_component_attacked"]
+[connection signal="ability_used" from="EntityA/AbilityComponent" to="EntityA" method="_on_ability_component_ability_used"]
 [connection signal="health_changed" from="EntityB/HealthComponent" to="EntityB" method="_on_health_component_health_changed"]
 [connection signal="just_reached_below_low_health" from="EntityB/HealthComponent" to="EntityB" method="_on_health_component_just_reached_below_low_health"]
 [connection signal="just_restored_above_low_health" from="EntityB/HealthComponent" to="EntityB" method="_on_health_component_just_restored_above_low_health"]
-[connection signal="attacked" from="EntityB/AttackComponent" to="EntityB" method="_on_attack_component_attacked"]
+[connection signal="ability_used" from="EntityB/AbilityComponent" to="EntityB" method="_on_ability_component_ability_used"]

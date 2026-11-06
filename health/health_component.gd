@@ -10,8 +10,7 @@ var was_low_health: bool = false ## Whether health was low before damaged.
 
 # Stat constants for modifiers
 const DEFENSE_CONSTANT = 0.3 ## Constant for defense modifier
-const ASBESTINE_CONSTANT = 0.3 ## Constant for fire resistance modifier
-const IMMUNITY_CONSTANT = 0.3 ## Constant for poison resistance modifier
+const IMMUNITY_CONSTANT = 0.3 ## Constant for resistance modifier
 
 # Signals
 signal died
@@ -70,18 +69,19 @@ func increase_health(amount: float) -> void:
 	print("%s healed %d HP" % [get_parent().name, int(amount)])
 
 ## Decrease health by x amount.
-func decrease_health(damage: float, type: Moves.Types) -> void:
+func decrease_health(damage: float, type: Stats.Type) -> void:
 	if is_dead(): # Don't decrease health if already dead
 		print("%s is dead! Unable to decrease health further." % [get_parent().name])
 		return
-	var modifier: float = 0.0
-	match type:
-		Moves.Types.NORMAL:
-			modifier = DEFENSE_CONSTANT * get_stats()["defense"]
-		Moves.Types.FIRE:
-			modifier = ASBESTINE_CONSTANT * get_stats()["asbestine"]
-		Moves.Types.POISON:
-			modifier = IMMUNITY_CONSTANT * get_stats()["immunity"]
+	
+	var modifier: float = DEFENSE_CONSTANT * get_stats()["defense"]
+	
+	if is_resistant_to(type):
+		modifier += IMMUNITY_CONSTANT * get_stats()["immunity"]
+		print("%s is resistant to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
+	if is_weak_to(type):
+		modifier = -(0.5 * damage)
+		print("%s is weak to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
 	damage = max(damage - modifier, 0.0) # Apply damage reduction by defense
@@ -110,6 +110,36 @@ func _update_health(new_value: float) -> void:
 	elif not now_low_health and was_low_health:
 		just_restored_above_low_health.emit()
 	was_low_health = now_low_health
+
+## Checks if the entity holding this HealthComponent is weak to the specified type.
+func is_weak_to(type: Stats.Type) -> bool:
+	match get_stats()["type"]:
+		Stats.Type.IGNIS:
+			return type == Stats.Type.AQUA
+		Stats.Type.AQUA:
+			return type == Stats.Type.ELECTRUM or Stats.Type.FOLIUM
+		Stats.Type.FOLIUM:
+			return type == Stats.Type.IGNIS
+		Stats.Type.ELECTRUM:
+			return type == Stats.Type.TERRA
+		Stats.Type.TERRA:
+			return type == Stats.Type.AQUA or Stats.Type.FOLIUM
+	return false
+
+## Checks if the entity holding this HealthComponent is resistant to the specified type.
+func is_resistant_to(type: Stats.Type) -> bool:
+	match get_stats()["type"]:
+		Stats.Type.IGNIS:
+			return type == Stats.Type.FOLIUM
+		Stats.Type.AQUA:
+			return type == Stats.Type.IGNIS or Stats.Type.TERRA
+		Stats.Type.FOLIUM:
+			return type == Stats.Type.TERRA or Stats.Type.AQUA
+		Stats.Type.ELECTRUM:
+			return type == Stats.Type.AQUA
+		Stats.Type.TERRA:
+			return type == Stats.Type.ELECTRUM
+	return false
 
 ## Checks if health is considered low.
 func is_low() -> bool:
