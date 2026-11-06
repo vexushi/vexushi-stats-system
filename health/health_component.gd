@@ -10,7 +10,8 @@ var was_low_health: bool = false ## Whether health was low before damaged.
 
 # Stat constants for modifiers
 const DEFENSE_CONSTANT = 0.3 ## Constant for defense modifier
-const IMMUNITY_CONSTANT = 0.3 ## Constant for resistance modifier
+const RESISTANCE_CONSTANT = 0.3 ## Constant for resistance modifier
+const WEAKNESS_CONSTANT = 0.75 ## Constant for type weakness modifier
 
 # Signals
 signal died
@@ -77,10 +78,10 @@ func decrease_health(damage: float, type: Stats.Type) -> void:
 	var modifier: float = DEFENSE_CONSTANT * get_stats()["defense"]
 	
 	if is_resistant_to(type):
-		modifier += IMMUNITY_CONSTANT * get_stats()["immunity"]
+		modifier += RESISTANCE_CONSTANT * get_stats()["resistance"]
 		print("%s is resistant to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
 	if is_weak_to(type):
-		modifier -= 0.75 * damage
+		modifier -= WEAKNESS_CONSTANT * damage
 		print("%s is weak to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
