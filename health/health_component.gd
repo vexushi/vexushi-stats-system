@@ -80,7 +80,7 @@ func decrease_health(damage: float, type: Stats.Type) -> void:
 		modifier += IMMUNITY_CONSTANT * get_stats()["immunity"]
 		print("%s is resistant to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
 	if is_weak_to(type):
-		modifier = -(0.5 * damage)
+		modifier -= 0.75 * damage
 		print("%s is weak to %s!" % [get_parent().name, str(Stats.Type.find_key(type))])
 	#var modifier = DEFENSE_CONSTANT * stats.defense
 	#defense_penetration = clampf(defense_penetration, 0.0, 1.0)
