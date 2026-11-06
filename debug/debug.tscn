@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://83l7btog1bkc"]
+[gd_scene format=3 uid="uid://83l7btog1bkc"]
 
 [ext_resource type="PackedScene" uid="uid://dq1em2fw3y4ay" path="res://entities/entity.tscn" id="1_ifkhq"]
 [ext_resource type="Script" uid="uid://baom7f4psosaj" path="res://health/health_component.gd" id="2_ifkhq"]
@@ -27,58 +27,58 @@ max_health = 700.0
 defense = 9.0
 metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 
-[node name="Debug" type="Node2D"]
+[node name="Debug" type="Node2D" unique_id=350398024]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2111388713]
 anchor_mode = 0
 
-[node name="EntityA" parent="." node_paths=PackedStringArray("health_bar", "health_component", "attack_component", "attack_target") instance=ExtResource("1_ifkhq")]
+[node name="EntityA" parent="." unique_id=1472110959 node_paths=PackedStringArray("health_bar", "health_component", "attack_component", "attack_target") instance=ExtResource("1_ifkhq")]
 position = Vector2(266, 232)
 health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
 attack_component = NodePath("AttackComponent")
 attack_target = NodePath("../EntityB/HealthComponent")
 
-[node name="StatsComponent" type="Node" parent="EntityA"]
+[node name="StatsComponent" type="Node" parent="EntityA" unique_id=1136467292]
 script = ExtResource("2_nlbt3")
 base_stats = SubResource("Resource_f7210")
 metadata/_custom_type_script = "uid://by8impnodn0ti"
 
-[node name="HealthComponent" type="Node" parent="EntityA"]
+[node name="HealthComponent" type="Node" parent="EntityA" unique_id=1729878385]
 script = ExtResource("2_ifkhq")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
-[node name="AttackComponent" type="Node" parent="EntityA"]
+[node name="AttackComponent" type="Node" parent="EntityA" unique_id=1304497325]
 script = ExtResource("4_stv80")
 moveset = Array[ExtResource("5_jfkso")]([SubResource("Resource_nlbt3")])
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
-[node name="HealthBar" parent="EntityA" node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
+[node name="HealthBar" parent="EntityA" unique_id=2052813472 node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
 offset_top = -163.0
 offset_bottom = -140.0
 max_value = 200.0
 health_component = NodePath("../HealthComponent")
 
-[node name="EntityB" parent="." node_paths=PackedStringArray("health_bar", "health_component", "attack_component") instance=ExtResource("1_ifkhq")]
+[node name="EntityB" parent="." unique_id=549579009 node_paths=PackedStringArray("health_bar", "health_component", "attack_component") instance=ExtResource("1_ifkhq")]
 position = Vector2(874, 232)
 health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
 attack_component = NodePath("AttackComponent")
 
-[node name="StatsComponent" type="Node" parent="EntityB"]
+[node name="StatsComponent" type="Node" parent="EntityB" unique_id=434442323]
 script = ExtResource("2_nlbt3")
 base_stats = SubResource("Resource_ydp0h")
 metadata/_custom_type_script = "uid://by8impnodn0ti"
 
-[node name="HealthComponent" type="Node" parent="EntityB"]
+[node name="HealthComponent" type="Node" parent="EntityB" unique_id=161016738]
 script = ExtResource("2_ifkhq")
 metadata/_custom_type_script = "uid://baom7f4psosaj"
 
-[node name="AttackComponent" type="Node" parent="EntityB"]
+[node name="AttackComponent" type="Node" parent="EntityB" unique_id=1524651356]
 script = ExtResource("4_stv80")
 metadata/_custom_type_script = "uid://xdo77ptt2r7t"
 
-[node name="HealthBar" parent="EntityB" node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
+[node name="HealthBar" parent="EntityB" unique_id=2033750734 node_paths=PackedStringArray("health_component") instance=ExtResource("4_sm0j5")]
 offset_top = -163.0
 offset_bottom = -140.0
 max_value = 700.0

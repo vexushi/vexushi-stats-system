@@ -21,7 +21,6 @@ signal damaged
 signal healed
 signal health_changed(old_value: float, new_value: float)
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Checks if stats are valid.
 	if  not get_stats():
@@ -33,7 +32,6 @@ func _ready() -> void:
 	
 	set_health(get_stats().max_health)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	pass
