@@ -11,6 +11,8 @@ extends Node2D
 @export var health_component: HealthComponent = null
 @export var attack_component: AttackComponent = null
 
+@export var attack_target: HealthComponent
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	nametag.text = self.name
@@ -76,5 +78,5 @@ func _on_move_1_button_up() -> void:
 			if move.name == "Slash":
 				move_id = i
 			i += 1
-		attack_component.send_attack(attack_component.attack_target, attack_component.moveset[move_id])
+		attack_component.send_attack(attack_target, attack_component.moveset[move_id])
 	pass # Replace with function body.
