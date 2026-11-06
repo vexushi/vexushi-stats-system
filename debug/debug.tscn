@@ -32,12 +32,11 @@ metadata/_custom_type_script = "uid://c45khdcxnvgrp"
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2111388713]
 anchor_mode = 0
 
-[node name="EntityA" parent="." unique_id=1472110959 node_paths=PackedStringArray("health_bar", "health_component", "attack_component", "attack_target") instance=ExtResource("1_ifkhq")]
+[node name="EntityA" parent="." unique_id=1472110959 node_paths=PackedStringArray("health_bar", "health_component", "attack_component") instance=ExtResource("1_ifkhq")]
 position = Vector2(266, 232)
 health_bar = NodePath("HealthBar")
 health_component = NodePath("HealthComponent")
 attack_component = NodePath("AttackComponent")
-attack_target = NodePath("../EntityB/HealthComponent")
 
 [node name="StatsComponent" type="Node" parent="EntityA" unique_id=1136467292]
 script = ExtResource("2_nlbt3")

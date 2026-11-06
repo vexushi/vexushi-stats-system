@@ -3,6 +3,7 @@
 class_name AttackComponent
 extends Node
 
+@export var attack_target: HealthComponent
 @export var moveset: Array[Moves] = []
 
 signal attacked(move: Moves)
